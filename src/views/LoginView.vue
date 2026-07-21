@@ -30,11 +30,6 @@
           </el-form-item>
           <el-button type="primary" size="large" :loading="loading" class="login-button" @click="submit">进入系统 <el-icon><Right /></el-icon></el-button>
         </el-form>
-        <div class="demo-accounts">
-          <span>演示账号</span>
-          <button v-for="item in demos" :key="item.username" @click="fill(item.username)">{{ item.label }}</button>
-        </div>
-        <p class="hint">所有演示账号密码均为 <b class="mono">123456</b></p>
       </div>
     </section>
   </div>
@@ -49,13 +44,8 @@ const router = useRouter()
 const auth = useAuthStore()
 const formRef = ref()
 const loading = ref(false)
-const form = reactive({ username: 'admin', password: '123456' })
+const form = reactive({ username: '', password: '' })
 const rules = { username: [{ required: true, message: '请输入账号' }], password: [{ required: true, message: '请输入密码' }] }
-const demos = [
-  { label: '管理员', username: 'admin' }, { label: '民警', username: 'police01' },
-  { label: '房东', username: 'owner01' }, { label: '承租人', username: 'tenant01' }
-]
-function fill(username) { form.username = username; form.password = '123456' }
 async function submit() {
   await formRef.value.validate()
   loading.value = true
@@ -83,7 +73,6 @@ h1 em { color: #58c7b4; font-style: normal; }
 .login-box { width: min(410px, 100%); }.form-index { color: #0e8a7a; font-size: 10px; letter-spacing: .18em; }
 h2 { color: #17324d; font-size: 30px; margin: 12px 0 8px; }.form-note { color: #8499a4; font-size: 13px; margin: 0 0 34px; }
 .login-button { width: 100%; margin-top: 8px; height: 48px; display: flex; gap: 10px; }
-.demo-accounts { display: flex; align-items: center; gap: 8px; margin-top: 25px; flex-wrap: wrap; }.demo-accounts span { color: #8499a4; font-size: 11px; }.demo-accounts button { border: 1px solid #dbe7e8; color: #456477; background: #fff; padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; }.demo-accounts button:hover { border-color: #0e8a7a; color: #0e8a7a; }
-.hint { color: #9aacb5; font-size: 11px; margin-top: 13px; }.mobile-brand { display: none; }.mini-seal { width: 13px; height: 13px; background: #0e8a7a; display: inline-block; margin-right: 8px; }
+.mobile-brand { display: none; }.mini-seal { width: 13px; height: 13px; background: #0e8a7a; display: inline-block; margin-right: 8px; }
 @media (max-width: 860px) { .login-page { grid-template-columns: 1fr; }.identity-panel { display: none; }.login-panel { min-height: 100vh; padding: 24px; }.mobile-brand { display: flex; align-items: center; font-weight: 700; margin-bottom: 52px; } }
 </style>

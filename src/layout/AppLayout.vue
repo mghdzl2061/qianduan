@@ -87,6 +87,7 @@ const groups = [
   { label: '系统设置', items: [
     { path: '/users', label: '用户管理', icon: 'User', roles: ['ADMIN'] },
     { path: '/logs', label: '操作日志', icon: 'Tickets', roles: ['ADMIN'] },
+    { path: '/logs', label: '我的操作', icon: 'Tickets', roles: ['POLICE', 'OWNER', 'TENANT'] },
     { path: '/profile', label: '个人中心', icon: 'Setting' }
   ]}
 ]

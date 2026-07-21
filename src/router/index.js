@@ -19,7 +19,7 @@ const routes = [
       { path: 'patrols', component: () => import('../views/PatrolView.vue'), meta: { title: '巡查任务', roles: ['ADMIN', 'POLICE'] } },
       { path: 'notices', component: () => import('../views/NoticeView.vue'), meta: { title: '通知公告' } },
       { path: 'messages', component: () => import('../views/MessageView.vue'), meta: { title: '消息中心' } },
-      { path: 'logs', component: () => import('../views/LogView.vue'), meta: { title: '操作日志', roles: ['ADMIN'] } },
+      { path: 'logs', component: () => import('../views/LogView.vue'), meta: { title: '操作记录' } },
       { path: 'profile', component: () => import('../views/ProfileView.vue'), meta: { title: '个人中心' } }
     ]
   }
