@@ -1,17 +1,21 @@
 <template>
   <div class="app-frame">
-    <aside class="sidebar" :class="{ compact: collapsed }">
+    <div class="sidebar-scrim" :class="{ visible: mobileMenuOpen }" @click="mobileMenuOpen = false"></div>
+    <aside class="sidebar" :class="{ compact: collapsed, 'mobile-open': mobileMenuOpen }">
       <div class="brand">
         <div class="brand-mark"><span></span><span></span><span></span><span></span></div>
-        <div v-if="!collapsed">
+        <div v-if="!collapsed || mobileMenuOpen">
           <strong>智慧门牌</strong>
           <small>社区数字档案</small>
         </div>
+        <button class="mobile-menu-close" aria-label="关闭导航" @click="mobileMenuOpen = false">
+          <el-icon><Close /></el-icon>
+        </button>
       </div>
-      <div v-if="!collapsed" class="district-tag"><i></i> 西安 · 社区治理端</div>
-      <el-menu :default-active="$route.path" router :collapse="collapsed" class="nav-menu">
+      <div v-if="!collapsed || mobileMenuOpen" class="district-tag"><i></i> 西安 · 社区治理端</div>
+      <el-menu :default-active="$route.path" router :collapse="collapsed && !mobileMenuOpen" class="nav-menu" @select="handleMenuSelect">
         <template v-for="group in visibleGroups" :key="group.label">
-          <div v-if="!collapsed" class="menu-caption">{{ group.label }}</div>
+          <div v-if="!collapsed || mobileMenuOpen" class="menu-caption">{{ group.label }}</div>
           <el-menu-item v-for="item in group.items" :key="item.path" :index="item.path">
             <el-icon><component :is="item.icon" /></el-icon><template #title>{{ item.label }}</template>
           </el-menu-item>
@@ -25,9 +29,14 @@
 
     <section class="workspace">
       <header class="topbar">
-        <div>
+        <div class="topbar-title">
+          <el-button class="mobile-menu-button" circle text aria-label="打开导航" @click="mobileMenuOpen = true">
+            <el-icon><Menu /></el-icon>
+          </el-button>
+          <div>
           <span class="route-kicker">DIGITAL DOORPLATE</span>
           <strong>{{ $route.meta.title || '智慧门牌' }}</strong>
+          </div>
         </div>
         <div class="top-actions">
           <el-badge :value="auth.unreadCount" :hidden="!auth.unreadCount" class="message-badge">
@@ -53,6 +62,7 @@ import { useAuthStore } from '../stores/auth'
 const router = useRouter()
 const auth = useAuthStore()
 const collapsed = ref(false)
+const mobileMenuOpen = ref(false)
 const roleText = { ADMIN: '系统管理员', POLICE: '社区民警', OWNER: '房东', TENANT: '承租人' }
 
 const groups = [
@@ -98,6 +108,10 @@ function logout() {
   auth.logout()
   router.push('/login')
 }
+
+function handleMenuSelect() {
+  mobileMenuOpen.value = false
+}
 </script>
 
 <style scoped>
@@ -114,14 +128,16 @@ function logout() {
 .brand-mark span:nth-child(3) { background: transparent; border: 2px solid #55c7b3; }
 .district-tag { margin: 16px 16px 6px; padding: 9px 10px; color: #b9d0db; font-size: 11px; border: 1px solid rgba(255,255,255,.11); background: rgba(255,255,255,.04); position: relative; z-index: 1; white-space: nowrap; }
 .district-tag i { display: inline-block; width: 6px; height: 6px; background: #55c7b3; border-radius: 50%; margin-right: 7px; box-shadow: 0 0 0 4px rgba(85,199,179,.12); }
-.nav-menu { border: 0; background: transparent; position: relative; z-index: 1; flex: 1; padding: 4px 8px; }
+.nav-menu { border: 0; background: transparent; position: relative; z-index: 1; flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 4px 8px; }
 .menu-caption { padding: 16px 12px 6px; color: #6f91a4; font-size: 10px; letter-spacing: .18em; }
 .nav-menu :deep(.el-menu-item) { color: #bdd0da; height: 43px; border-radius: 8px; margin: 2px 0; }
 .nav-menu :deep(.el-menu-item:hover) { background: rgba(255,255,255,.07); color: #fff; }
 .nav-menu :deep(.el-menu-item.is-active) { background: #0e8a7a; color: #fff; box-shadow: 0 8px 20px rgba(0,0,0,.16); }
 .collapse-button { position: relative; z-index: 1; height: 48px; border: 0; border-top: 1px solid rgba(255,255,255,.1); background: transparent; color: #8da9b8; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.mobile-menu-button, .mobile-menu-close, .sidebar-scrim { display: none; }
 .workspace { flex: 1; min-width: 0; }
 .topbar { height: 78px; background: rgba(255,255,255,.94); border-bottom: 1px solid #dce7e9; display: flex; align-items: center; justify-content: space-between; padding: 0 27px; position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px); }
+.topbar-title { display: flex; align-items: center; min-width: 0; }
 .route-kicker { display: block; font: 10px/1 "Cascadia Mono", monospace; letter-spacing: .16em; color: #88a0ad; margin-bottom: 7px; }
 .topbar strong { font-size: 16px; color: #17324d; }
 .top-actions, .user-chip { display: flex; align-items: center; gap: 12px; }
@@ -131,5 +147,54 @@ function logout() {
 .user-chip strong, .user-chip small { display: block; font-size: 12px; }
 .user-chip small { color: #8196a2; margin-top: 3px; font-size: 10px; }
 .content { min-height: calc(100vh - 78px); }
-@media (max-width: 880px) { .sidebar { width: 68px; flex-basis: 68px; } .sidebar .brand > div:last-child, .district-tag, .menu-caption, .collapse-button span { display: none; } .user-chip div { display: none; } }
+@media (max-width: 880px) {
+  .app-frame { display: block; }
+  .sidebar,
+  .sidebar.compact {
+    width: min(82vw, 280px);
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 60;
+    transform: translateX(-102%);
+    transition: transform .22s ease, box-shadow .22s ease;
+  }
+  .sidebar.mobile-open { transform: translateX(0); box-shadow: 18px 0 50px rgba(13, 35, 51, .28); }
+  .collapse-button { display: none; }
+  .mobile-menu-close {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    margin-left: auto;
+    border: 0;
+    border-radius: 9px;
+    color: #c8d9e1;
+    background: rgba(255,255,255,.08);
+  }
+  .sidebar-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: rgba(13, 35, 51, .45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .22s ease, visibility .22s ease;
+  }
+  .sidebar-scrim.visible { opacity: 1; visibility: visible; }
+  .workspace { width: 100%; }
+  .topbar { height: 64px; padding: 0 10px 0 8px; }
+  .topbar-title { gap: 3px; }
+  .mobile-menu-button { display: inline-flex; flex: 0 0 auto; font-size: 20px; }
+  .route-kicker { display: none; }
+  .topbar-title strong { display: block; max-width: 36vw; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .top-actions { gap: 2px; }
+  .user-chip { gap: 0; padding: 4px; }
+  .user-chip div { display: none; }
+  .user-chip .avatar { width: 32px; height: 32px; }
+  .content { min-height: calc(100vh - 64px); }
+}
 </style>
