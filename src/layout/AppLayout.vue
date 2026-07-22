@@ -73,7 +73,8 @@ const groups = [
   { label: '房屋档案', items: [
     { path: '/communities', label: '社区管理', icon: 'OfficeBuilding', roles: ['ADMIN'] },
     { path: '/buildings', label: '楼栋管理', icon: 'School', roles: ['ADMIN'] },
-    { path: '/houses', label: '房屋与门牌', icon: 'House' }
+    { path: '/houses', label: '房屋与门牌', icon: 'House' },
+    { path: '/owner-applications', label: '房东认证', icon: 'Stamp', roles: ['ADMIN', 'POLICE'] }
   ]},
   { label: '人口服务', items: [
     { path: '/tenants', label: '承租人管理', icon: 'UserFilled' },

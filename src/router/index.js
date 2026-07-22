@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   { path: '/login', component: () => import('../views/LoginView.vue'), meta: { public: true } },
+  { path: '/owner-register', component: () => import('../views/OwnerRegisterView.vue'), meta: { public: true } },
   { path: '/doorplate/:publicId', component: () => import('../views/DoorplateView.vue'), meta: { public: true } },
   {
     path: '/',
@@ -13,6 +14,7 @@ const routes = [
       { path: 'buildings', component: () => import('../views/BasicResourceView.vue'), props: { type: 'building' }, meta: { title: '楼栋管理', roles: ['ADMIN'] } },
       { path: 'users', component: () => import('../views/UserView.vue'), meta: { title: '用户管理', roles: ['ADMIN'] } },
       { path: 'houses', component: () => import('../views/HouseView.vue'), meta: { title: '房屋与门牌' } },
+      { path: 'owner-applications', component: () => import('../views/OwnerApplicationView.vue'), meta: { title: '房东认证', roles: ['ADMIN', 'POLICE'] } },
       { path: 'tenants', component: () => import('../views/TenantView.vue'), meta: { title: '承租人管理' } },
       { path: 'tenancies', component: () => import('../views/TenancyView.vue'), meta: { title: '入住登记与审核' } },
       { path: 'permits', component: () => import('../views/PermitView.vue'), meta: { title: '居住证办理' } },

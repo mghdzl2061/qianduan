@@ -29,6 +29,7 @@
             <el-input v-model="form.password" size="large" type="password" show-password placeholder="请输入密码" prefix-icon="Lock" />
           </el-form-item>
           <el-button type="primary" size="large" :loading="loading" class="login-button" @click="submit">进入系统 <el-icon><Right /></el-icon></el-button>
+          <el-button size="large" class="register-button" @click="router.push('/owner-register')">注册房东账号</el-button>
         </el-form>
       </div>
     </section>
@@ -73,6 +74,7 @@ h1 em { color: #58c7b4; font-style: normal; }
 .login-box { width: min(410px, 100%); }.form-index { color: #0e8a7a; font-size: 10px; letter-spacing: .18em; }
 h2 { color: #17324d; font-size: 30px; margin: 12px 0 8px; }.form-note { color: #8499a4; font-size: 13px; margin: 0 0 34px; }
 .login-button { width: 100%; margin-top: 8px; height: 48px; display: flex; gap: 10px; }
+.register-button { width: 100%; height: 44px; margin-top: 10px; }
 .mobile-brand { display: none; }.mini-seal { width: 13px; height: 13px; background: #0e8a7a; display: inline-block; margin-right: 8px; }
 @media (max-width: 860px) { .login-page { grid-template-columns: 1fr; }.identity-panel { display: none; }.login-panel { min-height: 100vh; padding: 24px; }.mobile-brand { display: flex; align-items: center; font-weight: 700; margin-bottom: 52px; } }
 </style>
